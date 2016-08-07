@@ -1,6 +1,6 @@
 {
-    "name": "masto/doctrine.workbench.bundle",
-    "license": "proprietary",
+    "name": "javierrodriguezcuevas/doctrine-workbench-bundle",
+    "license": "javierrodriguezcuevas",
     "type": "project",
     "autoload": {
         "psr-4": {
