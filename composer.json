@@ -9,6 +9,7 @@
     },
     "autoload-dev": {
         "psr-4": {
+            "Mst\\Bundle\\DoctrineWorkbenchBundle\\": "",
             "Tests\\": "tests/"
         }
     },
