@@ -1,0 +1,909 @@
+<div class="row">
+    <div class="col-lg-12">
+        <div class="form-group">
+            <div class="btn-group" role="group">
+                <button class="btn btn-default" type="button" ng-click="clearWorkbenchConfirmation()" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.new&apos; | translate }}">
+                    <i class="glyphicon glyphicon-file"> </i>
+                </button>
+                <a id="btn-list-schemas" class="btn btn-default" ng-click="listSchemas()" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.open&apos; | translate }}">
+                    <i class="icon icon-folder-open"> </i>
+                </a>
+                <a id="btn-save" class="btn btn-default ladda-button" data-style="zoom-in" ladda="loading" ng-click="saveSchema()" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.save&apos; | translate }}">
+                    <i class="icon icon-floppy"> </i>
+                </a>
+                <button class="btn btn-default" type="button" ng-click="sendSchema()" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.create&apos; | translate }}">
+                    <i class="icon icon-magic"> </i>
+                </button>
+            </div>
+            <button class="btn btn-primary pull-right" ng-click="newEntity()" type="button">
+                <i class="icon icon-plus"> </i>
+                {{ 'label.new_entity' | translate }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<div class="slider-vertical-container">
+    <span slider="" ng-model="currentZoom" on-slide="updateZoom()" ng-click="updateZoom()" min="0.1" step="0.01" precision="2" max="1.9" orientation="vertical" value="currentZoom" slider-tooltip="hide"></span>
+</div>
+<div id="workbench-wrapper">
+    <div id="advanced-options-wrapper">
+        <div class="item-header-wrapper">
+            <div class="item-move">
+                <span class="title">{{ 'label.advanced_options' | translate }}</span>
+            </div>
+            <div class="item-header">
+                <button type="button" class="close minimize"><span>-</span></button>
+            </div>
+        </div>
+        <div advanced-options="">
+            <form novalidate="" name="currentEntityForm" class="form-horizontal" ng-submit="currentEntityOk(currentEntityForm)">
+                <div class="disabled-form" ng-show="null === currentEntity"></div>
+                <table class="table table-condensed table-bordered table-striped nomargin-bottom">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span class="text-sm">{{ 'label.entity.name' | translate }}</span>
+                            </td>
+                            <td>
+                                <div ng-class="{ &apos;has-error&apos;: currentEntityForm.entityName.$invalid &amp;&amp; currentEntityForm.entityName.$dirty }">
+                                    <input class="form-control input-xs" name="entityName" type="text" required ng-model="currentEntity.entityName" ng-maxlength="255" uniqueentityproperty="existByEntityName" entity="currentEntity">
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.entityName.$error.required 
+                                        &amp;&amp; currentEntityForm.entityName.$invalid 
+                                        &amp;&amp; currentEntityForm.entityName.$dirty">{{ 'error.required' | translate }}</span>
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.entityName.$error.maxlength 
+                                        &amp;&amp; currentEntityForm.entityName.$invalid 
+                                        &amp;&amp; currentEntityForm.entityName.$dirty">{{ 'error.maxlength' | translate }}</span>
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.entityName.$error.uniqueentityproperty 
+                                        &amp;&amp; currentEntityForm.entityName.$invalid 
+                                        &amp;&amp; currentEntityForm.entityName.$dirty">{{ 'error.exists' | translate }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="text-sm">{{ 'label.entity.table_name' | translate }}</span>
+                            </td>
+                            <td>
+                                <div ng-class="{ &apos;has-error&apos;: currentEntityForm.tableName.$invalid &amp;&amp; currentEntityForm.tableName.$dirty }">
+                                    <input class="form-control input-xs" name="tableName" type="text" required ng-model="currentEntity.tableName" ng-maxlength="255" uniqueentityproperty="existByTableName" entity="currentEntity">
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.tableName.$error.required 
+                                        &amp;&amp; currentEntityForm.tableName.$invalid 
+                                        &amp;&amp; currentEntityForm.tableName.$dirty">{{ 'error.required' | translate }}</span>
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.tableName.$error.maxlength 
+                                        &amp;&amp; currentEntityForm.tableName.$invalid 
+                                        &amp;&amp; currentEntityForm.tableName.$dirty">{{ 'error.maxlength' | translate }}</span>
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.tableName.$error.uniqueentityproperty 
+                                        &amp;&amp; currentEntityForm.tableName.$invalid 
+                                        &amp;&amp; currentEntityForm.tableName.$dirty">{{ 'error.exists' | translate }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span class="text-sm">{{ 'label.entity.namespace' | translate }}</span>
+                            </td>
+                            <td>
+                                <div ng-class="{ &apos;has-error&apos;: currentEntityForm.namespace.$invalid &amp;&amp; currentEntityForm.namespace.$dirty }">
+                                    <input class="form-control input-xs" name="namespace" type="text" required ng-model="currentEntity.namespace" ng-maxlength="255">
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.namespace.$error.required 
+                                        &amp;&amp; currentEntityForm.namespace.$invalid 
+                                        &amp;&amp; currentEntityForm.namespace.$dirty">{{ 'error.required' | translate }}</span>
+                                    <span class="help-block nomargin-bottom text-sm" ng-show="currentEntityForm.namespace.$error.maxlength 
+                                        &amp;&amp; currentEntityForm.namespace.$invalid 
+                                        &amp;&amp; currentEntityForm.namespace.$dirty">{{ 'error.maxlength' | translate }}</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="text-right">
+                    <button class="btn btn-default btn-xs" ng-disabled="null === currentEntity" ng-click="currentEntityCancel()" type="button">{{ 'label.cancel' | translate }}</button>
+                    <button class="btn btn-primary btn-xs" ng-disabled="null === currentEntity || currentEntityForm.$invalid" type="submit">{{ 'label.ok' | translate }}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="workbench">
+        <div plumb-item="" class="item" ng-repeat="entity in entities" ng-style="{&apos;left&apos;: entity.x, &apos;top&apos;: entity.y }" ng-click="setCurrentEntity(entity)" data-identifier="{{entity.id}}">
+            <div class="item-header-wrapper">
+                <div class="item-move"></div>
+                <div class="item-header">
+                    <button type="button" class="close" ng-click="removeEntityConfirmation(entity.id)"><span>×</span>&nbsp;</button>
+                </div>
+            </div>
+            <div class="col-lg-12 item-container">
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary btn-xs pull-left" ng-click="editEntity(entity.id)" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.edit_entity&apos; | translate }}">
+                        <i class="icon icon-edit"></i>
+                    </button>
+                    <label class="label-align-xs">{{ entity.entityName }}</label>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-info btn-xs pull-left" ng-click="editFields(entity.id)" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.edit_fields&apos; | translate }}">
+                        <i class="icon icon-list"></i>
+                    </button>
+                    <label class="label-align-xs">Campos:&nbsp;</label>{{ entity.fields.length }}
+                </div>
+                <div class="clearfix"></div>
+                <div class="btn-group btn-group-justified" data-identifier="{{entity.id}}">
+                    <span plumb-connect-one-to-one="" class="one-to-one btn btn-xs no-draggable" ng-disabled="entity.fields.length == 0">
+                        <i class="icon icon-tree"></i>
+                    </span>
+                    <span plumb-connect-one-to-many="" class="one-to-many btn btn-xs no-draggable" ng-disabled="entity.fields.length == 0">
+                        <i class="icon icon-tree2"></i>
+                    </span>
+                    <span plumb-connect-many-to-many="" class="many-to-many btn btn-xs no-draggable" ng-disabled="entity.fields.length == 0">
+                        <i class="icon icon-tree3"></i>
+                    </span>
+                </div>
+                <div class="clearfix"><br></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ngInclude: 'fieldsOptionsContent.html' -->
+<script type="text/ng-template" id="fieldsOptionsContent.html">
+<div class="table-responsive">
+    <table class="table fields-table">
+        <thead>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th>{{ 'label.name' | translate }}</th>
+            <th>{{ 'label.name_database' | translate }}</th>
+            <th>{{ 'label.type' | translate }}</th>
+            <th>{{ 'label.length' | translate }}</th>
+            <th>{{ 'label.pk' | translate }}</th>
+            <th>{{ 'label.nn' | translate }}</th>
+            <th>{{ 'label.strategy' | translate }}</th>
+        </thead>
+        <tbody ui-sortable ng-model="fields">
+            <tr class="table-fields" 
+                ng-repeat="field in fields"
+                ng-form="fieldForm"
+                ng-class="{ 'info': (field.relations.length > 0), 'warning': field.pk }"
+                id="field-{{ field.id }}"
+                >
+                <td class="nopadding-top noppading-bottom noppading-right">
+                    <i class="move icon icon-sort"> </i>
+                </td>
+                <td>
+                    <button class="btn btn-xs btn-link btn-align-xs disabled nopadding-left noppading-right"
+                        tooltip-placement="top" 
+                        tooltip="">
+                        <i class="icon" 
+                           ng-class="{ 'icon-chain': (field.relations.length > 0), 
+                            'icon-key': field.pk }"> </i>
+                    </button>
+                </td>
+                <td ng-class="{ 'has-error': fieldForm.name.$invalid && fieldForm.name.$dirty }">
+                    <input class="form-control" name="name" type="text"
+                           ng-model="field.name"
+                           ng-disabled="(field.relations.length > 0)"
+                           ng-required="!(field.relations.length > 0)"
+                           ng-maxlength="255"
+                           uniquefieldname="existFieldName"
+                    />
+                    <p class="help-block error" 
+                        ng-show="fieldForm.name.$error.required 
+                        && fieldForm.name.$invalid 
+                        && fieldForm.name.$dirty">{{ 'error.required' | translate }}</p>
+                    <p class="help-block error" 
+                        ng-show="fieldForm.name.$error.maxlength 
+                        && fieldForm.name.$invalid 
+                        && fieldForm.name.$dirty">{{ 'error.maxlength' | translate }}</p>
+                    <p class="help-block error" 
+                        ng-show="fieldForm.name.$error.uniquefieldname 
+                        && fieldForm.name.$invalid 
+                        && fieldForm.name.$dirty">{{ 'error.exists' | translate }}</p>
+                </td>
+                <td ng-class="{ 'has-error': fieldForm.tableName.$invalid && fieldForm.tableName.$dirty }">
+                    <input class="form-control" name="tableName" type="text"
+                           ng-model="field.tableName"
+                           ng-disabled="(field.relations.length > 0)"
+                           ng-required="!(field.relations.length > 0)"
+                           ng-maxlength="255"
+                           uniquefieldname="existFieldName"
+                    />
+                    <p class="help-block error" 
+                        ng-show="fieldForm.tableName.$error.required 
+                        && fieldForm.tableName.$invalid 
+                        && fieldForm.tableName.$dirty">{{ 'error.required' | translate }}</p>
+                    <p class="help-block error" 
+                        ng-show="fieldForm.tableName.$error.maxlength 
+                        && fieldForm.tableName.$invalid 
+                        && fieldForm.tableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+                    <p class="help-block error" 
+                        ng-show="fieldForm.tableName.$error.uniquefieldname 
+                        && fieldForm.tableName.$invalid 
+                        && fieldForm.tableName.$dirty">{{ 'error.exists' | translate }}</p>
+                </td>
+                <td>
+                    <select class="form-control" name="type" style="width:100px;"
+                            ng-model="field.type" 
+                            ng-disabled="(field.relations.length > 0)"
+                            ng-required="!(field.relations.length > 0)"
+                            ng-options="t.id as t.name for t in types"
+                    >
+                    </select>
+                </td>
+                <td ng-class="{ 'has-error': fieldForm.length.$invalid && fieldForm.length.$dirty }">
+                    <input class="form-control length-field" name="length" type="number"
+                           ng-model="field.length"
+                           ng-disabled="isFieldDisabled(field.type, 'length')"
+                           ng-required="isLengthRequired(field.type)"
+                    />
+                    <p class="help-block error"
+                        ng-show="fieldForm.length.$error.required 
+                        && fieldForm.length.$invalid 
+                        && fieldForm.length.$dirty">{{ 'error.required' | translate }}</p>
+                    <p class="help-block error"
+                        ng-show="fieldForm.length.$error.number 
+                        && fieldForm.length.$invalid 
+                        && fieldForm.length.$dirty">{{ 'error.number' | translate }}</p>
+                </td>
+                <td>
+                    <div class="checkbox">
+                        <input class="checkbox" type="checkbox" 
+                               ng-model="field.pk"
+                               ng-disabled="isFieldDisabled(field.type, 'pk')"
+                        />
+                        <label></label>
+                    </div>
+                </td>
+                <td>
+                    <div class="checkbox">
+                        <input class="checkbox" type="checkbox" 
+                               ng-model="field.nn"
+                               ng-disabled="(field.pk) || (field.relations.length > 0)"
+                        />
+                        <label></label>
+                    </div>
+                </td>
+                <td ng-class="{ 'has-error': fieldForm.strategy.$invalid && fieldForm.strategy.$dirty }">
+                    <select class="form-control" name="strategy" style="width:100px;"
+                            ng-model="field.strategy" 
+                            ng-disabled="isFieldDisabled(field.type, 'pk') || !(field.pk)"
+                            ng-required="field.pk"
+                            ng-options="t.id as t.name for t in strategies"
+                    >
+                    </select>
+                </td>
+                <td>
+                    <button type="button" class="btn btn-danger btn-xs btn-align-xs" 
+                            ng-click="removeField(field.id)"
+                            ng-show="!(field.relations.length > 0)"
+                    >
+                        <i class="icon icon-minus"></i>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</script>
+<!-- ngInclude: 'manyToManyContent.html' -->
+<script type="text/ng-template" id="manyToManyContent.html">     
+<!-- NOMBRE DE LA TABLA EN MANY TO MANY -->
+<div class="form-group" 
+    ng-class="{ 'has-error': form.entityName.$invalid && form.entityName.$dirty }"
+    >
+    <label class="col-lg-4 col-md-4 control-label">{{ 'label.middle_tablename' | translate }}</label>
+    <div class="col-lg-8 col-md-8">
+        <input type="text" name="entityName" class="form-control" placeholder="Nombre de la tabla"
+            ng-model="relation.tableName"
+            ng-required="relation.type == 3"
+            ng-maxlength="255"
+        />
+        <p class="help-block error" 
+            ng-show="form.entityName.$error.required 
+            && form.entityName.$invalid 
+            && form.entityName.$dirty">{{ 'error.required' | translate }}</p>
+        <p class="help-block error" 
+            ng-show="form.entityName.$error.maxlength 
+            && form.entityName.$invalid 
+            && form.entityName.$dirty">{{ 'error.maxlength' | translate }}</p>
+    </div>
+</div>
+
+<hr />
+
+<!-- OPCIONES ENTIDAD OWNER -->
+<fieldset class="col-md-6">
+
+    <legend class="">{{ 'label.entity' | translate }} {{ sourceEntityName }} <span class="">{{ 'label.owner_side' | translate }}</span></legend>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.related_field' | translate }}</label>
+        <div class="col-lg-8 col-md-8">
+            <select class="form-control" name="targetRelatedFieldId" 
+                    ng-model="relation.targetRelatedFieldId"
+                    ng-options="t.id as t.name for t in fieldsTarget"
+                    >
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.sourceFieldName.$invalid && form.sourceFieldName.$dirty }"
+            >
+            <input type="text" name="sourceFieldName"  class="form-control"
+                   ng-model="relation.sourceField.name"
+                   ng-required="true"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.sourceFieldName.$error.required 
+                && form.sourceFieldName.$invalid 
+                && form.sourceFieldName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.sourceFieldName.$error.maxlength 
+                && form.sourceFieldName.$invalid 
+                && form.sourceFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.sourceFieldTableName.$invalid && form.sourceFieldTableName.$dirty }"
+            >
+            <input type="text" name="sourceFieldTableName"  class="form-control"
+                   ng-model="relation.sourceField.tableName"
+                   ng-required="true"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.sourceFieldTableName.$error.required 
+                && form.sourceFieldTableName.$invalid 
+                && form.sourceFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.sourceFieldTableName.$error.maxlength 
+                && form.sourceFieldTableName.$invalid 
+                && form.sourceFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.cascade_options' | translate }}</label>
+        <div class="col-lg-8 col-md-8">
+            <div ng-dropdown-multiselect="" options="cascadeOptions" 
+            selected-model="relation.cascadeOptions" 
+            extra-settings="multiselectSettings"
+            translation-texts="multiselectTextSettings"></div>
+        </div>
+    </div>
+</fieldset>
+
+<!-- OPCIONES ENTIDAD INVERSE MANY-TO-MANY -->
+<fieldset class="col-md-6">
+
+    <legend class="">{{ 'label.entity' | translate }} {{ targetEntityName }} <span class="">{{ 'label.inverse_side' | translate }}</span></legend>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.related_field' | translate }}</label>
+        <div class="col-lg-8 col-md-8">
+            <select class="form-control" name="sourceRelatedFieldId"
+                    ng-model="relation.sourceRelatedFieldId"
+                    ng-options="t.id as t.name for t in fieldsSource"
+                    >
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.targetFieldName.$invalid && form.targetFieldName.$dirty }"
+            >
+            <input type="text" name="targetFieldName"  class="form-control"
+                   ng-model="relation.targetField.name"
+                   ng-required="true"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.targetFieldName.$error.required 
+                && form.targetFieldName.$invalid 
+                && form.targetFieldName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.targetFieldName.$error.maxlength 
+                && form.targetFieldName.$invalid 
+                && form.targetFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.targetFieldTableName.$invalid && form.targetFieldTableName.$dirty }"
+            >
+            <input type="text" name="targetFieldTableName"  class="form-control"
+                   ng-model="relation.targetField.tableName"
+                   ng-required="relation.type != 3"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.targetFieldTableName.$error.required 
+                && form.targetFieldTableName.$invalid 
+                && form.targetFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.targetFieldTableName.$error.maxlength 
+                && form.targetFieldTableName.$invalid 
+                && form.targetFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+</fieldset>
+</script>
+<!-- ngInclude: 'modalEditFieldsContent.html' -->
+<script type="text/ng-template" id="modalEditFieldsContent.html">
+	<div class="modal-header">
+            <h3>{{ 'title.edit_fields' | translate }} {{ title }}</h3>
+	</div>
+	<form novalidate name="form" class="form-horizontal" 
+            ng-submit="ok(form)">
+            <div class="modal-body">
+                <button type="button" class="btn btn-success btn-sm" 
+                    ng-click="addField()">
+                    <i class="icon icon-plus"> </i>
+                    {{ 'label.new_field' | translate }}
+                </button>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <span ng-include src="'fieldsOptionsContent.html'"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" 
+                    ng-click="cancel()">
+                    {{ 'label.cancel' | translate }}
+                </button>
+                <button type="submit" class="btn btn-primary"
+                    ng-disabled="form.$invalid">
+                    {{ 'label.ok' | translate }}
+                </button>
+            </div>
+	</form>
+</script>
+<!-- ngInclude: 'modalLoadSchema.html' -->
+<script type="text/ng-template" id="modalLoadSchema.html">
+    <div class="modal-header">
+        <h3>{{ 'title.load_schema' | translate }}</h3>
+    </div>
+    <form novalidate name="form" class="form-horizontal" ng-submit="ok(form)">
+        <div class="modal-body">
+            <div ng-show="!showTable">
+                <img ng-src='{{ loadingGif }}' />
+                <span>{{ 'label.loading' | translate }}</span>
+            </div>
+            <table class="table"
+                ng-show="showTable">
+                <thead>
+                    <th>
+                        {{ 'label.name' | translate }}
+                    </th>
+                    <th></th>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="schema in schemas">
+                        <td>
+                            {{ schema.name }}
+                        </td>
+                        <td class="text-right">
+                            <button class="btn btn-info btn-sm ladda-button"
+                                data-style="zoom-in"
+                                ladda="loading"
+                                ng-click="loadSchema(schema.id)"
+                                tooltip-placement="top" 
+                                tooltip-append-to-body="true" 
+                                tooltip="{{ 'label.load' | translate }}">
+                                <i class="glyphicon glyphicon-cloud-download"> </i>
+                            </button>
+                            <button class="btn btn-danger btn-sm ladda-button"
+                                data-style="zoom-in"
+                                ladda="loading"
+                                ng-click="removeSchema(schema.id)"
+                                tooltip-placement="top" 
+                                tooltip-append-to-body="true" 
+                                tooltip="{{ 'label.delete' | translate }}">
+                                <i class="glyphicon glyphicon-remove"> </i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" ng-click="close()">{{ 'label.close' | translate }}</button>
+        </div>
+    </form>
+</script>
+<!-- ngInclude: 'modalNewEditEntityContent.html' -->
+<script type="text/ng-template" id="modalNewEditEntityContent.html">
+    <div class="modal-header">
+        <h3 ng-if="isNew">{{ 'title.new_entity' | translate }}</h3>
+        <h3 ng-if="!isNew">{{ 'title.edit_entity' | translate }} {{ entity.entityName }}</h3>
+    </div>
+    <form novalidate name="form" class="form-horizontal" ng-submit="ok(form)">
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group" ng-class="{ 'has-error': form.entityName.$invalid && form.entityName.$dirty }">
+                        <div class="col-lg-4 col-md-4">
+                            <label for="entityName">{{ 'label.entity.name' | translate }}</label>
+                        </div>
+                        <div class="col-lg-8 col-md-8">
+                            <input class="form-control" name="entityName" type="text" required
+                                   ng-model="entity.entityName"
+                                   ng-change="updateTableName()"
+                                   ng-maxlength="255"
+                                   uniqueentityproperty="existByEntityName"
+                                   entity="entity"
+                                   />
+                            <p class="help-block"
+                                ng-show="form.entityName.$error.required 
+                                && form.entityName.$invalid 
+                                && form.entityName.$dirty">{{ 'error.required' | translate }}</p>
+                            <p class="help-block" 
+                                ng-show="form.entityName.$error.maxlength 
+                                && form.entityName.$invalid 
+                                && form.entityName.$dirty">{{ 'error.maxlength' | translate }}</p>
+                            <p class="help-block" 
+                                ng-show="form.entityName.$error.uniqueentityproperty 
+                                && form.entityName.$invalid 
+                                && form.entityName.$dirty">{{ 'error.exists' | translate }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.tableName.$invalid && form.tableName.$dirty }">
+                        <div class="col-lg-4 col-md-4">
+                            <label for="tableName">{{ 'label.entity.table_name' | translate }}</label>
+                        </div>
+                        <div class="col-lg-8 col-md-8">
+                            <input class="form-control" name="tableName" type="text" required
+                                   ng-model="entity.tableName"
+                                   ng-maxlength="255"
+                                   uniqueentityproperty="existByTableName"
+                                   entity="entity"
+                                   />
+                            <p class="help-block" 
+                                ng-show="form.tableName.$error.required 
+                                && form.tableName.$invalid 
+                                && form.tableName.$dirty">{{ 'error.required' | translate }}</p>
+                            <p class="help-block" 
+                                ng-show="form.tableName.$error.maxlength 
+                                && form.tableName.$invalid 
+                                && form.tableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+                            <p class="help-block" 
+                                ng-show="form.tableName.$error.uniqueentityproperty 
+                                && form.tableName.$invalid 
+                                && form.tableName.$dirty">{{ 'error.exists' | translate }}</p>
+                        </div>
+                    </div>
+                    <div class="form-group" ng-class="{ 'has-error': form.namespace.$invalid && form.namespace.$dirty }">
+                        <div class="col-lg-4 col-md-4">
+                            <label for="namespace">{{ 'label.entity.namespace' | translate }}</label>
+                        </div>
+                        <div class="col-lg-8 col-md-8">
+                            <input class="form-control" name="namespace" type="text" required
+                                   ng-model="entity.namespace"
+                                   ng-maxlength="255"
+                                   />
+                            <p class="help-block" 
+                                ng-show="form.namespace.$error.required 
+                                && form.namespace.$invalid 
+                                && form.namespace.$dirty">{{ 'error.required' | translate }}</p>
+                            <p class="help-block" 
+                                ng-show="form.namespace.$error.maxlength 
+                                && form.namespace.$invalid 
+                                && form.namespace.$dirty">{{ 'error.maxlength' | translate }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-danger" 
+                ng-click="cancel()">
+                {{ 'label.cancel' | translate }}
+            </button>
+            <button type="submit" class="btn btn-primary" 
+                ng-disabled="form.$invalid">
+                {{ 'label.ok' | translate }}
+            </button>
+        </div>
+    </form>
+</script>
+<!-- ngInclude: 'modalNewEditRelationContent.html' -->
+<script type="text/ng-template" id="modalNewEditRelationContent.html">
+
+    <div class="modal-header">
+        <h3 ng-if="isNew">{{ 'title.new_relation' | translate }} {{ relation.name }}</h3>
+        <h3 ng-if="!isNew">{{ 'title.edit_relation' | translate }} {{ relation.name }}</h3>
+    </div>
+ 
+    <form id="relation-options" novalidate name="form" class="form-horizontal bg-white" ng-submit="ok(form)">
+
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+
+                    <span ng-switch="relation.type">
+                        <span ng-switch-when="1">
+                            <div ng-include src="'oneToOneContent.html'"></div>
+                        </span>
+                        <span ng-switch-when="2">
+                            <div ng-include src="'oneToManyContent.html'"></div>
+                        </span>
+                        <span ng-switch-when="3">
+                            <div ng-include src="'manyToManyContent.html'"></div>
+                        </span>
+                    </span>
+                    
+               </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        
+        <div class="modal-footer">
+            <button type="button" 
+                class="btn btn-danger" 
+                ng-click="cancel()">
+                {{ 'label.cancel' | translate }}
+            </button>
+            <button type="submit" 
+                class="btn btn-primary"
+                ng-disabled="form.$invalid">
+                {{ 'label.ok' | translate }}
+            </button>
+        </div>
+    </form>
+    
+</script>
+<!-- ngInclude: 'modalTemplate.html' -->
+<script type="text/ng-template" id="modalTemplate.html">
+    <div tabindex="-1" role="dialog" class="modal fade" ng-class="{in: animate}" ng-style="{'z-index': 1050 + index*10, display: 'block'}">
+        <div class="modal-dialog" ng-class="{'modal-sm': size == 'sm', 'modal-lg': size == 'lg'}">
+            <div class="modal-content clearfix" modal-transclude></div>
+        </div>
+    </div>
+</script>
+<!-- ngInclude: 'oneToManyContent.html' -->
+<script type="text/ng-template" id="oneToManyContent.html">
+<!-- OPCIONES ENTIDAD OWNER -->
+<fieldset class="col-md-6">
+
+    <legend class="">{{ 'label.entity' | translate }} {{ sourceEntityName }} <span class="">{{ 'label.inverse_side' | translate }}</span></legend>
+    
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.related_field' | translate }}</label>
+            <div class="col-lg-8 col-md-8">
+                <select class="form-control" name="targetRelatedFieldId" 
+                        ng-model="relation.targetRelatedFieldId"
+                        ng-options="t.id as t.name for t in fieldsTarget"
+                        >
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.sourceFieldName.$invalid && form.sourceFieldName.$dirty }"
+                >
+                <input type="text" name="sourceFieldName"  class="form-control"
+                       ng-model="relation.sourceField.name"
+                       ng-required="true"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldName.$error.required 
+                    && form.sourceFieldName.$invalid 
+                    && form.sourceFieldName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldName.$error.maxlength 
+                    && form.sourceFieldName.$invalid 
+                    && form.sourceFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.sourceFieldTableName.$invalid && form.sourceFieldTableName.$dirty }"
+                >
+                <input type="text" name="sourceFieldTableName"  class="form-control"
+                       ng-model="relation.sourceField.tableName"
+                       ng-required="true"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldTableName.$error.required 
+                    && form.sourceFieldTableName.$invalid 
+                    && form.sourceFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldTableName.$error.maxlength 
+                    && form.sourceFieldTableName.$invalid 
+                    && form.sourceFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.cascade_options' | translate }}</label>
+            <div class="col-lg-8 col-md-8">
+                <div ng-dropdown-multiselect="" options="cascadeOptions" 
+                selected-model="relation.cascadeOptions" 
+                extra-settings="multiselectSettings"
+                translation-texts="multiselectTextSettings"></div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<!-- OPCIONES ENTIDAD INVERSE -->
+<fieldset class="col-md-6">
+    
+    <legend class="">{{ 'label.entity' | translate }} {{ targetEntityName }} <span class="">{{ 'label.owner_side' | translate }}</span></legend>
+    
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.targetFieldName.$invalid && form.targetFieldName.$dirty }"
+                >
+                <input type="text" name="targetFieldName"  class="form-control"
+                       ng-model="relation.targetField.name"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.targetFieldName.$error.required 
+                    && form.targetFieldName.$invalid 
+                    && form.targetFieldName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.targetFieldName.$error.maxlength 
+                    && form.targetFieldName.$invalid 
+                    && form.targetFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.targetFieldTableName.$invalid && form.targetFieldTableName.$dirty }"
+                >
+                <input type="text" name="targetFieldTableName"  class="form-control"
+                       ng-model="relation.targetField.tableName"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.targetFieldTableName.$error.required 
+                    && form.targetFieldTableName.$invalid 
+                    && form.targetFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.targetFieldTableName.$error.maxlength 
+                    && form.targetFieldTableName.$invalid 
+                    && form.targetFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+    </div>
+</fieldset>
+</script>
+<!-- ngInclude: 'oneToOneContent.html' -->
+<script type="text/ng-template" id="oneToOneContent.html"> 
+<!-- OPCIONES ENTIDAD OWNER -->
+<fieldset class="col-md-6">
+
+    <legend class="">{{ 'label.entity' | translate }} {{ sourceEntityName }} <span class="">{{ 'label.owner_side' | translate }}</span></legend>
+    
+    <div class="col-md-12">
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.related_field' | translate }}</label>
+            <div class="col-lg-8 col-md-8">
+                <select class="form-control" name="targetRelatedFieldId" 
+                        ng-model="relation.targetRelatedFieldId"
+                        ng-options="t.id as t.name for t in fieldsTarget"
+                        >
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.sourceFieldName.$invalid && form.sourceFieldName.$dirty }"
+                >
+                <input type="text" name="sourceFieldName"  class="form-control"
+                       ng-model="relation.sourceField.name"
+                       ng-required="true"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldName.$error.required 
+                    && form.sourceFieldName.$invalid 
+                    && form.sourceFieldName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldName.$error.maxlength 
+                    && form.sourceFieldName.$invalid 
+                    && form.sourceFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+            <div class="col-lg-8 col-md-8"
+                ng-class="{ 'has-error': form.sourceFieldTableName.$invalid && form.sourceFieldTableName.$dirty }"
+                >
+                <input type="text" name="sourceFieldTableName"  class="form-control"
+                       ng-model="relation.sourceField.tableName"
+                       ng-required="true"
+                       ng-maxlength="255"
+                />
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldTableName.$error.required 
+                    && form.sourceFieldTableName.$invalid 
+                    && form.sourceFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+                <p class="help-block error" 
+                    ng-show="form.sourceFieldTableName.$error.maxlength 
+                    && form.sourceFieldTableName.$invalid 
+                    && form.sourceFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            <label class="col-lg-4 col-md-4 control-label">{{ 'label.cascade_options' | translate }}</label>
+            <div class="col-lg-8 col-md-8">
+                <div ng-dropdown-multiselect="" options="cascadeOptions" 
+                selected-model="relation.cascadeOptions" 
+                extra-settings="multiselectSettings"
+                translation-texts="multiselectTextSettings"></div>
+            </div>
+        </div>
+    </div>
+</fieldset>
+
+<!-- OPCIONES ENTIDAD INVERSE -->
+<fieldset class="col-md-6">
+    
+    <legend class="">{{ 'label.entity' | translate }} {{ targetEntityName }} <span class="">{{ 'label.inverse_side' | translate }}</span></legend>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.targetFieldName.$invalid && form.targetFieldName.$dirty }"
+            >
+            <input type="text" name="targetFieldName"  class="form-control"
+                   ng-model="relation.targetField.name"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.targetFieldName.$error.required 
+                && form.targetFieldName.$invalid 
+                && form.targetFieldName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.targetFieldName.$error.maxlength 
+                && form.targetFieldName.$invalid 
+                && form.targetFieldName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <label class="col-lg-4 col-md-4 control-label">{{ 'label.name_database' | translate }}</label>
+        <div class="col-lg-8 col-md-8"
+            ng-class="{ 'has-error': form.targetFieldTableName.$invalid && form.targetFieldTableName.$dirty }"
+            >
+            <input type="text" name="targetFieldTableName"  class="form-control"
+                   ng-model="relation.targetField.tableName"
+                   ng-maxlength="255"
+            />
+            <p class="help-block error" 
+                ng-show="form.targetFieldTableName.$error.required 
+                && form.targetFieldTableName.$invalid 
+                && form.targetFieldTableName.$dirty">{{ 'error.required' | translate }}</p>
+            <p class="help-block error" 
+                ng-show="form.targetFieldTableName.$error.maxlength 
+                && form.targetFieldTableName.$invalid 
+                && form.targetFieldTableName.$dirty">{{ 'error.maxlength' | translate }}</p>
+        </div>
+    </div>
+</fieldset>
+</script>

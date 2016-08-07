@@ -1,0 +1,13 @@
+services:       
+    doctrine_workbench.repository:
+        class: Mst\DoctrineWorkbenchBundle\Services\DoctrineSchemaRepository
+        arguments: ['@doctrine.orm.entity_manager']
+    
+    doctrine_workbench.view_validator:
+        class: Mst\DoctrineWorkbenchBundle\Services\ViewDataValidator
+        
+    doctrine_workbench.doctrine_transformer:
+        class: Mst\DoctrineWorkbenchBundle\Services\ViewToModelTransformer
+    
+    doctrine_workbench.compressor_manager:
+        class: Mst\DoctrineWorkbenchBundle\Utils\CompressorManager

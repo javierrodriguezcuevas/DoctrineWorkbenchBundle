@@ -1,0 +1,34 @@
+mst_doctrine_workbench_homepage:
+    path:     /
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:index }
+    methods:  [GET]
+    
+mst_doctrine_workbench_views:
+    path:     /views/index.html
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:views }
+    methods:  [GET]
+
+mst_doctrine_workbench_list:
+    path:     /list-schemas
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:list }
+    methods:  [POST]
+
+mst_doctrine_workbench_get:
+    path:     /get-schema
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:get }
+    methods:  [POST]
+
+mst_doctrine_workbench_save:
+    path:     /save
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:save }
+    methods:  [POST]
+
+mst_doctrine_workbench_delete:
+    path:     /delete
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:delete }
+    methods:  [DELETE]
+
+mst_doctrine_workbench_proccess:
+    path:     /proccess
+    defaults: { _controller: MstDoctrineWorkbenchBundle:Frontend:proccess }
+    methods:  [POST]
