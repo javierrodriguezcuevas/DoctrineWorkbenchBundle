@@ -123,7 +123,7 @@
                     <button type="button" class="btn btn-info btn-xs pull-left" ng-click="editFields(entity.id)" tooltip-placement="top" tooltip-append-to-body="true" tooltip="{{ &apos;label.edit_fields&apos; | translate }}">
                         <i class="icon icon-list"></i>
                     </button>
-                    <label class="label-align-xs">Campos:&nbsp;</label>{{ entity.fields.length }}
+                    <label class="label-align-xs">{{ 'label.entity.fields' | translate }}: </label>{{ entity.fields.length }}
                 </div>
                 <div class="clearfix"></div>
                 <div class="btn-group btn-group-justified" data-identifier="{{entity.id}}">
@@ -180,6 +180,7 @@
                 <td ng-class="{ 'has-error': fieldForm.name.$invalid && fieldForm.name.$dirty }">
                     <input class="form-control" name="name" type="text"
                            ng-model="field.name"
+                           ng-change="updateTableName(field)"
                            ng-disabled="(field.relations.length > 0)"
                            ng-required="!(field.relations.length > 0)"
                            ng-maxlength="255"
