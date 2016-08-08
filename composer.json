@@ -4,12 +4,11 @@
     "type": "project",
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "Mst\\DoctrineWorkbenchBundle\\": "/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Mst\\DoctrineWorkbenchBundle\\": "src",
             "Tests\\": "tests/"
         }
     },
